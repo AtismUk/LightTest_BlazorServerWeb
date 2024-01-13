@@ -5,7 +5,7 @@ namespace LightTest_BlazorServerWeb.DataBase
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext()
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             Database.EnsureCreated();
         }
@@ -14,5 +14,8 @@ namespace LightTest_BlazorServerWeb.DataBase
         {
             modelBuilder.Entity<User>().HasData(new List<User>() { new() { Id = 1, Name = "Admin", Login = "Admin", Password = "Admin", isAdmin = true } });
         }
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<Group> Groups { get; set; }
     }
 }

@@ -1,7 +1,16 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
-
-<MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
-<MudText Class="mb-8">Welcome to your new app, powered by MudBlazor!</MudText>
-<MudAlert Severity="Severity.Normal">You can find documentation and examples on our website here: <MudLink Href="https://mudblazor.com" Typo="Typo.body2" Color="Color.Inherit"><b>www.mudblazor.com</b></MudLink></MudAlert>
+<section class="wrapper bg-soft-primary angled lower-start">
+    <div class="container pt-7 pt-md-11 pb-8">
+        <div class="row gx-0 gy-10 align-items-center">
+            <div class="col-lg-6" data-cues="slideInDown" data-group="page-title" data-delay="600" data-disabled="true">
+                <MudText Typo="Typo.subtitle1" Class="mb-2">LightCad - справочник, тесты, опросники</MudText>
+                <MudText Typo="Typo.h5" Class="mb-2">Тесты, справочный материал и опросники в одном месте</MudText>
+                <button class="btn btn-outline-primary rounded-0">Войти</button>
+            </div>
+            <div class="col-lg-5 offset-lg-1" data-cues="slideInDown" data-disabled="true">
+                <MudImage Width="350" Height="350" Src="/css/iconic/index.svg"></MudImage>
+            </div>
+        </div>
+    </div>
+</section>

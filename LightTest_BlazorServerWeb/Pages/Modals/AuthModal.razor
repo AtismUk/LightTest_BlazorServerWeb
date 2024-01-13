@@ -1,0 +1,44 @@
+﻿@inject IAuthService _authService
+
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="loginModel.Login" Label="Standard" Variant="Variant.Text" Margin="Margin.Dense"></MudTextField>
+        <MudTextField @bind-Value="loginModel.Password" InputType="@PasswordInput" Label="Password" Variant="Variant.Text" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonVisible" AdornmentAriaLabel="Show Password" />
+        <MudButton Variant="Variant.Filled" OnClick="ButtonAuthAsync" DisableElevation="true" Color="Color.Primary">Войти</MudButton>
+    </DialogContent>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    private LoginModel loginModel = new();
+
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+    bool isShow;
+    InputType PasswordInput = InputType.Password;
+
+    void ButtonVisible()
+    {
+        if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+    async Task ButtonAuthAsync()
+    {
+        var res = await _authService.AuthUserAsync(loginModel);
+        if (res.isValid)
+        {
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+    }
+}

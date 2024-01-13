@@ -1,5 +1,25 @@
-﻿<MudNavMenu>
-    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-    <MudNavLink Href="counter" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Add">Counter</MudNavLink>
-    <MudNavLink Href="fetchdata" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.List">Fetch data</MudNavLink>
+﻿@inject IAuthService _authService
+@inject IDialogService _dialogService
+
+
+<MudNavMenu Class="d-flex flex-column justify-content-between" Style="height: 100%">
+    <div>
+        <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+        <MudNavLink Href="counter" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Add">Counter</MudNavLink>
+        <MudNavLink Href="fetchdata" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.List">Fetch data</MudNavLink>
+    </div>
+    <div>
+        <MudNavLink OnClick="OpenLoginModal" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.List">Войти</MudNavLink>
+    </div>
 </MudNavMenu>
+
+
+
+@code{
+
+    private void OpenLoginModal()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        _dialogService.Show<AuthModal>("Авторизация", options);
+    }
+}
