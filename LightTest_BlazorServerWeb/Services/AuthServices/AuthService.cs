@@ -1,4 +1,6 @@
-﻿using LightTest_BlazorServerWeb.DataBase;
+﻿
+using LightTest_BlazorServerWeb.DataBase;
+using LightTest_BlazorServerWeb.DataBase.Models.UserPart;
 using LightTest_BlazorServerWeb.Models;
 using LightTest_BlazorServerWeb.Models.AuthModel;
 using LightTest_BlazorServerWeb.Services.Interfaces;
@@ -51,5 +53,11 @@ namespace LightTest_BlazorServerWeb.Services.AuthServices
         {
             await _customAuthState.AuthUserAsync();
         }
+
+        public async Task<ResponseService<UserSession>> GetUserInfoAsync()
+        {
+            return await _customAuthState.GetUserSessionAsync();
+        }
+
     }
 }

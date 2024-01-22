@@ -19,7 +19,7 @@
 
     private void OpenLoginModal()
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var options = new DialogOptions { CloseButton = true };
         _dialogService.Show<AuthModal>("Авторизация", options);
     }
 }

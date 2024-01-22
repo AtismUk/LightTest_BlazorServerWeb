@@ -1,0 +1,144 @@
+﻿@page "/test"
+@inject IBaseService _baseSerive;
+@inject IDialogService _dialogService;
+@inject ITestService _testService;
+@using LightTest_BlazorServerWeb.Models.Output.Test;
+
+
+<section>
+    <div class="container">
+        <div class="mb-3 mt-6">
+            <h2>тест на основы техники безопасности</h2>
+            <h4 class="mt-2">Тест на основы техники безпасности</h4>
+        </div>
+    </div>
+</section>
+<hr class="my-6" style="border-color: black;" />
+
+@if (indexOfQuestion == 45)
+{
+    <section>
+
+    </section>
+}
+else
+{
+    <section class="container">
+        <div class="container" style="background-color: #F5F5F5;">
+            <div class="p-6">
+                <h3 class="card-title">@testModel.Questions[indexOfQuestion].Name</h3>
+                <p class="lead">
+                    Да
+                </p>
+                <div class="mt-1">
+                    <form>
+                        @if(testModel.Questions[indexOfQuestion].isSeveral)
+                        {
+                            @foreach (var answer in testModel.Questions[indexOfQuestion].Answers)
+                            {
+                                <MudCheckBox Label=@answer.Text @bind-Checked="answer.isSelected"></MudCheckBox>
+                            }
+                        }
+                        else
+                        {
+                            <MudGrid>
+                                <MudItem xs="12" md="5">
+                                    <MudRadioGroup @bind-Value="testModel.Questions[indexOfQuestion].selected" T="int">
+                                        @foreach (var answer in testModel.Questions[indexOfQuestion].Answers)
+                                        {
+                                            <MudRadio T="int" Value="@answer.Id" Color="Color.Dark">@answer.Text</MudRadio>
+                                        }
+                                    </MudRadioGroup>
+                                </MudItem>
+                                <MudItem xs="12" md="1" Style="width:100%"></MudItem>
+                            </MudGrid>
+
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+         <div class="mt-2 d-flex justify-content-between">
+                    @if(indexOfQuestion == 0)
+                    {
+                        <MudButton Class="my-border" OnClick="NextQuestion" Variant="Variant.Outlined" Size="Size.Small" Color="Color.Success">Далее</MudButton>
+                    }
+                    else if (indexOfQuestion + 1 == testModel.Questions.Count())
+                    {
+                        <MudButton Class="my-border" OnClick="PreviousQuestion" Variant="Variant.Outlined" Size="Size.Small" Color="Color.Dark">Назад</MudButton>
+                        <MudButton Class="my-border" OnClick="FinishTest" Variant="Variant.Outlined" Size="Size.Small" Color="Color.Success">Закончить тест</MudButton>
+                    }
+                    else if(indexOfQuestion > 0)
+                    {
+                        <MudButton Class="my-border" OnClick="PreviousQuestion" Variant="Variant.Outlined" Size="Size.Small" Color="Color.Dark">Назад</MudButton>
+                        <MudButton Class="my-border" OnClick="NextQuestion" Variant="Variant.Outlined" Size="Size.Small" Color="Color.Success">Далее</MudButton>
+                    }
+                </div>
+    </section>
+}
+
+
+
+@code {
+
+    public int indexOfQuestion = 0;
+    private TestModel testModel = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var res = await _baseSerive.GetTestByIdAsync(1);
+        if (res.isValid)
+        {
+            testModel = res.Value!;
+        }
+
+    }
+
+    void NextQuestion()
+    {
+        indexOfQuestion++;
+    }
+
+    void PreviousQuestion()
+    {
+        indexOfQuestion++;
+    }
+
+    async Task FinishTest()
+    {
+        //foreach (var questions in testModel.Questions)
+        //{
+        //    bool answersAreMarkered = false;
+        //    foreach (var answers in questions.Answers)
+        //    {
+        //        if (answers.isSelected)
+        //        {
+        //            answersAreMarkered = true;
+        //        }
+        //    }
+        //    if (answersAreMarkered == false)
+        //    {
+        //        // Окно всплывающее
+        //        return;
+        //    }
+        //}
+
+        var options = new DialogOptions { CloseButton = true };
+        var dialog = _dialogService.Show<ConfirmTestModal>("Сохранение результатов", options);
+
+        if(!dialog.Result.IsCanceled)
+        {
+            var res = await _testService.ConfirmTestAsync(testModel);
+            if(res.isValid)
+            {
+                Console.WriteLine("Я сохранил его бля");
+            }
+            else
+            {
+                Console.WriteLine(res.Message);
+            }
+
+        }
+    }
+}

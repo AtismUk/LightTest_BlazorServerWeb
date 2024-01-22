@@ -1,4 +1,5 @@
-﻿using LightTest_BlazorServerWeb.Models.AuthModel;
+﻿using LightTest_BlazorServerWeb.Models;
+using LightTest_BlazorServerWeb.Models.AuthModel;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.Security.Claims;
@@ -18,15 +19,14 @@ namespace LightTest_BlazorServerWeb.Services.AuthServices
             var state = new AuthenticationState(_anonym);
             try
             {
-                var protectedSession = await _session.GetAsync<UserSession>("UserSession");
-                var userSession = protectedSession.Success ? protectedSession.Value : null;
+                var userSession = await GetUserSessionAsync();
 
-                if (userSession == null)
+                if (!userSession.isValid)
                 {
                     return state;
                 }
 
-                var claims = CreateClaims(userSession);
+                var claims = CreateClaims(userSession.Value!);
 
                 var claimPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims, "customAuth"));
                 state = new AuthenticationState(claimPrincipal);
@@ -58,6 +58,23 @@ namespace LightTest_BlazorServerWeb.Services.AuthServices
             }
 
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
+        }
+
+
+        public async Task<ResponseService<UserSession>> GetUserSessionAsync()
+        {
+            var protectedSession = await _session.GetAsync<UserSession>("UserSession");
+            var userSession = protectedSession.Success ? protectedSession.Value : null;
+
+            if (userSession == null)
+            {
+                return new();
+            }
+            return new()
+            {
+                isValid = true,
+                Value = userSession
+            };
         }
 
 

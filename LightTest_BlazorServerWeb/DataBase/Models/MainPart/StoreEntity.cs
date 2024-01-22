@@ -1,6 +1,6 @@
 ﻿namespace LightTest_BlazorServerWeb.DataBase.Models.MainPart
 {
-    public class StorePart
+    public class StoreEntity
     {
         public string Guid { get; set; }
         public bool isDocument { get; set; } = false;
@@ -9,7 +9,7 @@
 
         public int? TopicId { get; set; }
         public int ArticleId { get; set; }
-        public Topic Topic { get; set; }
-        public Article Article { get; set; }
+        public TopicEntity Topic { get; set; }
+        public ArticleEntity Article { get; set; }
     }
 }

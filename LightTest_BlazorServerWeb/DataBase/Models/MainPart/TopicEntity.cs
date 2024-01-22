@@ -1,6 +1,6 @@
 ﻿namespace LightTest_BlazorServerWeb.DataBase.Models.MainPart
 {
-    public class Topic : BaseModel
+    public class TopicEntity : BaseModel
     {
         public string Name { get; set; }
         public string Description { get; set; }

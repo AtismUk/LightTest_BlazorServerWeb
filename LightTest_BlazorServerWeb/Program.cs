@@ -1,5 +1,6 @@
 using LightTest_BlazorServerWeb.Data;
 using LightTest_BlazorServerWeb.DataBase;
+using LightTest_BlazorServerWeb.Services;
 using LightTest_BlazorServerWeb.Services.AuthServices;
 using LightTest_BlazorServerWeb.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -26,8 +27,8 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseSqlite(builder.Configuration["ConnectionStrings:Sqlite"]);
 });
 
-
-
+builder.Services.AddScoped<ITestService, TestService>();
+builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

@@ -1,0 +1,19 @@
+﻿
+<MudDialog>
+    <DialogContent>
+        <MudText>Вы точно хотите завершить тест? Ответы будут сохранены и изменить их будет нельзя</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cansel">Остаться</MudButton>
+        <MudButton Color="Color.Primary"OnClick="Sudmit" Variant="Variant.Filled">Сохранить ответы</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    void Sudmit() => MudDialog.Close(DialogResult.Ok(true));
+    void Cansel() => MudDialog.Cancel();
+
+}

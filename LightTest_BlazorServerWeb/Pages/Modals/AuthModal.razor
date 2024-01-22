@@ -1,22 +1,52 @@
 ﻿@inject IAuthService _authService
 
-<MudDialog>
+<MudDialog Style="min-width: 400px">
     <DialogContent>
-        <MudTextField @bind-Value="loginModel.Login" Label="Standard" Variant="Variant.Text" Margin="Margin.Dense"></MudTextField>
-        <MudTextField @bind-Value="loginModel.Password" InputType="@PasswordInput" Label="Password" Variant="Variant.Text" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonVisible" AdornmentAriaLabel="Show Password" />
-        <MudButton Variant="Variant.Filled" OnClick="ButtonAuthAsync" DisableElevation="true" Color="Color.Primary">Войти</MudButton>
+        <EditForm Model="loginModel" OnSubmit="@((context) => SubmitForm(context))">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Логин" Class="mt-3"
+                                  @bind-Value="loginModel.Login" For="@(() => loginModel.Login)"/>
+                    <MudTextField Label="Пароль" Class="mt-3"
+                                  @bind-Value="loginModel.Password" For="@(() => loginModel.Password)" InputType="InputType.Password" />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Войти</MudButton>
+                </MudCardActions>
+                <div class="pt-2 pb-2 text-center">
+                    <MudText Color="@Color.Error">@errorMessage</MudText>
+                </div>
+            </MudCard>
+        </EditForm>
     </DialogContent>
 </MudDialog>
-
 
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     private LoginModel loginModel = new();
+    public string errorMessage = "";
 
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
     bool isShow;
     InputType PasswordInput = InputType.Password;
 
+
+    async Task SubmitForm(EditContext editContext)
+    {
+        if (editContext.Validate())
+        {
+            var res = await _authService.AuthUserAsync(loginModel);
+            if (res.isValid)
+            {
+                MudDialog.Close(DialogResult.Ok(true));
+            }
+            else
+            {
+                errorMessage = res.Message;
+            }
+        }
+    }
     void ButtonVisible()
     {
         if (isShow)
@@ -30,15 +60,6 @@
             isShow = true;
             PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
             PasswordInput = InputType.Text;
-        }
-    }
-
-    async Task ButtonAuthAsync()
-    {
-        var res = await _authService.AuthUserAsync(loginModel);
-        if (res.isValid)
-        {
-            MudDialog.Close(DialogResult.Ok(true));
         }
     }
 }

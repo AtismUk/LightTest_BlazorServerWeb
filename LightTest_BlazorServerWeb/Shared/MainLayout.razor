@@ -5,13 +5,13 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Class="my-bg-white my-border">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Dark" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+    <MudAppBar Class="my-bg-white my-border my-border-buttom">
+        <MudButton Variant="Variant.Outlined" Class="my-border" Size="Size.Small" Color="Color.Dark" IconColor="Color.Dark" StartIcon="@Icons.Material.Filled.Menu" OnClick="@((e) => DrawerToggle())">Меню</MudButton>
         <MudSpacer />
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
-        <MudDrawerHeader>
-            <MudText Typo="Typo.h6">LightTest_BlazorServerWeb</MudText>
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="0">
+        <MudDrawerHeader Class="my-border my-border-buttom">
+            <MudText Typo="Typo.h6">LightTest</MudText>
         </MudDrawerHeader>
         <NavMenu />
     </MudDrawer>
@@ -21,7 +21,7 @@
 </MudLayout>
 
 @code {
-    bool _drawerOpen = true;
+    bool _drawerOpen = false;
     private MudTheme Theme = new MudTheme();
 
     void DrawerToggle()
